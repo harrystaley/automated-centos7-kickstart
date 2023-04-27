@@ -2,7 +2,7 @@
 #  Creates embedded kickstart from CentOS ISO.
 
 # GLOBAL VARIABLES
-DIR=$(pwd)
+PWD=$(pwd)
 
 # USAGE STATEMENT
 function usage() {
@@ -19,7 +19,7 @@ EOF
 while getopts ":vhq" OPTION; do
 	case $OPTION in
 		v)
-			echo "$0: Manpack Atom CentOS 7 iso creator v. 0.01"
+			echo "$0: CentOS 7 automated install iso creator v. 0.01"
 			;;
 		h)
 			usage
@@ -91,48 +91,48 @@ fi
 if ! file "$1" | grep -q -e "9660.*boot" -e "x86 boot" -e "DOS/MBR boot" ;
 then
 	echo "Mounting CentOS iso Image..."
-	mkdir -p "$DIR"/original-mnt
-	mkdir "$DIR"/manpack-tmp
-	$SUDO mount -o loop "$1" "$DIR"/original-mnt
+	mkPWD -p "$PWD"/original-mnt
+	mkPWD "$PWD"/custom-tmp
+	$SUDO mount -o loop "$1" "$PWD"/original-mnt
 
-	if [[ -e $DIR/original-mnt/.discinfo && -e $DIR/original-mnt/.treeinfo ]];
+	if [[ -e $PWD/original-mnt/.discinfo && -e $PWD/original-mnt/.treeinfo ]];
 	then
-		CENTOS_VERSION=$(grep -E "^7\.[0-9]+" "$DIR"/original-mnt/.discinfo)
+		CENTOS_VERSION=$(grep -E "^7\.[0-9]+" "$PWD"/original-mnt/.discinfo)
 		MAJOR=$(echo "$CENTOS_VERSION" | awk -F '.' '{ print $1 }')
 		MINOR=$(echo "$CENTOS_VERSION" | awk -F '.' '{ print $2 }')
-		BUILD=$(cd "$DIR"/original-mnt/Packages/ || exit 1; ls centos-release* | awk -F '.' '{ print $2 }')
-		ARCH=$(cd "$DIR"/original-mnt/Packages/ || exit 1; ls centos-release* | awk -F '.' '{ print $5 }')
-		ATOM_ISO="CentOS-$MAJOR.$MINOR-$ARCH-DVD-$BUILD-Manpack_Atom.iso"
+		BUILD=$(cd "$PWD"/original-mnt/Packages/ || exit 1; ls centos-release* | awk -F '.' '{ print $2 }')
+		ARCH=$(cd "$PWD"/original-mnt/Packages/ || exit 1; ls centos-release* | awk -F '.' '{ print $5 }')
+		CUSTOM_ISO="CentOS-$MAJOR.$MINOR-$ARCH-DVD-$BUILD-Manpack_Atom.iso"
 		if [[ $MAJOR -ne 7 ]];
 		then
 			echo "ERROR: Image is not CentOS 7.4+"
-			$SUDO umount "$DIR"/original-mnt
-			$SUDO rm -rf "$DIR"/original-mnt
+			$SUDO umount "$PWD"/original-mnt
+			$SUDO rm -rf "$PWD"/original-mnt
 			exit 1
 		fi
 		if [[ $MINOR -lt 4 ]];
 		then
 			echo "ERROR: iso image is not CentOS 7.4+"
-			$SUDO umount "$DIR"/original-mnt
-			$SUDO rm -rf "$DIR"/original-mnt
+			$SUDO umount "$PWD"/original-mnt
+			$SUDO rm -rf "$PWD"/original-mnt
 			exit 1
 		fi
 	else
 		echo "ERROR: Image is not CentOS"
-		$SUDO umount "$DIR"/original-mnt
-		$SUDO rm -rf "$DIR"/original-mnt
+		$SUDO umount "$PWD"/original-mnt
+		$SUDO rm -rf "$PWD"/original-mnt
 		exit 1
 	fi
 	echo "Done."
 
 	echo -n "Copying CentOS iso Image..."
   # Copy all files preserving all attributes.
-	cp -a "$DIR"/original-mnt/* "$DIR"/manpack-tmp/
-	cp -a "$DIR"/original-mnt/.*info "$DIR"/manpack-tmp/
+	cp -a "$PWD"/original-mnt/* "$PWD"/custom-tmp/
+	cp -a "$PWD"/original-mnt/.*info "$PWD"/custom-tmp/
 	echo " Done."
-  # unmount and delete the original-mnt directory.
-	$SUDO umount "$DIR"/original-mnt
-	rm -rf "$DIR"/original-mnt
+  # unmount and delete the original-mnt PWDectory.
+	$SUDO umount "$PWD"/original-mnt
+	rm -rf "$PWD"/original-mnt
 else
 	echo "ERROR: ISO image is not bootable."
 	exit 1
@@ -141,29 +141,29 @@ fi
 # CREATE ISO CUSTOM ISO
 
 echo -n "Modifying CentOS iso Image..."
-# Copies contents of the config directory to their spots where they need to be on the iso.
-cp -a "$DIR"/config/* "$DIR"/manpack-tmp/
+# Copies contents of the config PWDectory to their spots where they need to be on the iso.
+cp -a "$PWD"/config/* "$PWD"/custom-tmp/
 echo " Done."
 echo "Remastering CentOS iso Image..."
-cd "$DIR"/manpack-tmp || exit 1
+cd "$PWD"/custom-tmp || exit 1
 chmod u+w isolinux/
 find . -name TRANS.TBL -exec rm -f '{}' \; 
 # Generate the ISO file
-genisoimage -l -r -J -V "CentOS-7-x86_64" -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -c isolinux/boot.cat -o "$DIR"/"$ATOM_ISO" -eltorito-alt-boot -e images/efiboot.img -no-emul-boot .
+genisoimage -l -r -J -V "CentOS-7-x86_64" -b isolinux/isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table -c isolinux/boot.cat -o "$PWD"/"$CUSTOM_ISO" -eltorito-alt-boot -e images/efiboot.img -no-emul-boot .
 
-# Delete the /manpack-tmp directory since you are done.
-cd "$DIR" || exit 1
-rm -rf "$DIR"/manpack-tmp
+# Delete the /custom-tmp Directory since you are done.
+cd "$PWD" || exit 1
+rm -rf "$PWD"/custom-tmp
 echo "Done."
 
 echo "Making UEFI Bootable and Signing CentOS iso Image..."
 # Make the ISO bootable
-/usr/bin/isohybrid --uefi "$DIR"/"$ATOM_ISO" &> /dev/null
+/usr/bin/isohybrid --uefi "$PWD"/"$CUSTOM_ISO" &> /dev/null
 # Add an MD5 hash to the ISO file.
-/usr/bin/implantisomd5 "$DIR"/"$ATOM_ISO"
+/usr/bin/implantisomd5 "$PWD"/"$CUSTOM_ISO"
 echo "Done."
 
-echo "iso Created. [$DIR/$ATOM_ISO]"
+echo "iso Created. [$PWD/$CUSTOM_ISO]"
 
 echo "Creating the iso metadata file..."
 FULL_USER_NAME=$(getent passwd "$(whoami)" | cut -d ':' -f 5)
@@ -171,9 +171,9 @@ CREATION_DATE=$(date --utc --rfc-2822)
 SCRIPT_NAME=$(basename "$0")
 SCRIPT_VERSION=$(grep -iE "# +version" createiso.sh | tail -1 | cut -d ' ' -f 3)
 ORIGINAL_ISO_HASH=$(sha256sum "$1")
-ATOM_ISO_HASH=$(sha256sum "$DIR"/"$ATOM_ISO")
+CUSTOM_ISO_HASH=$(sha256sum "$PWD"/"$CUSTOM_ISO")
 SCRIPT_HASH=$(sha256sum "$SCRIPT_NAME")
-cat <<EOF > "$DIR/${ATOM_ISO%.*}.info.txt"
+cat <<EOF > "$PWD/${CUSTOM_ISO%.*}.info.txt"
   Prepared By: $FULL_USER_NAME
 Creation Date: $CREATION_DATE
 
@@ -184,7 +184,7 @@ Project Source: automated-centos7-kickstart
    Project URL: https://github.com/harrystaley/automated-centos7-kickstart
 
 $ORIGINAL_ISO_HASH
-$ATOM_ISO_HASH
+$CUSTOM_ISO_HASH
 
 Mainline Downloads: https://www.centos.org/download/
  Rolling Downloads: https://buildlogs.centos.org/rolling/7/isos/x86_64/
