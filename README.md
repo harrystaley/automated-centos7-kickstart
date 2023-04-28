@@ -7,24 +7,26 @@
 Modifies a CentOS 7 (tested with CentOS-7-x86_64-DVD-1810.iso)
 x86_64 iso with a kickstart that will automate Manpack Atom installations.
 
-## Quickstart
+## Prerequisites
 
-To create the ISO image downlaod the CentOS 7 ISO file into this directory.
+Install the following software:
 
-```terminal
-$ sudo su
-# ./createiso.sh CentOS-7-x86_64-DVD-1601-01.iso 
-```
+- [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
+- [Vagrant](https://developer.hashicorp.com/vagrant/docs/installation)
+
+To create the custom ISO image downlaod a updated CentOS 7 ISO file into this directory.
+
+- [CentOS 7 x86_64](http://isoredirect.centos.org/centos/7/isos/x86_64/)
 
 ## Project Structure
 
 ```text
 vagrantfile - This is used to create a CentOS 7 VM to run the script.
-createiso.sh - installation script to modify CentOS 7 ISO image
+create_custom_iso.sh - installation script to modify CentOS 7 ISO image
 /config - Files needed to modify the ISO image.
 	/EFI/BOOT/grub.cfg - Menu Configuration for UEFI boot
-	/isolinux/isolinux.cfg - Menu Configuration for Kickstart
-	/ks/Atom_Kickstart.cfg - Kickstart Configuration (Calls menu.py in %pre)
+	/isolinux/isolinux.cfg - Menu Configuration for BIOS boot
+	/ks/ks.cfg - Kickstart Configuration
 ```
 
 **NOTE:** The directory structure in the `/config/` directory are copied over to the newly created iso.
@@ -33,13 +35,20 @@ createiso.sh - installation script to modify CentOS 7 ISO image
 
 ```bash
 # As root execute the below command replacing <CentOS 7 ISO> with the path to your CentOS 7 ISO file.
-$ ./createiso.sh <CentOS 7 ISO> 
+$ ./create_custom_iso.sh <CentOS 7 ISO> 
+```
+
+Example.
+
+```terminal
+$ sudo su
+# ./create_custom_iso.sh CentOS-7-x86_64-DVD-1601-01.iso 
 ```
 
 ## Sample Output
 
 ```terminal
-# ./createiso.sh CentOS-7-x86_64-DVD-1601-01.iso 
+# ./create_custom_iso.sh CentOS-7-x86_64-DVD-1601-01.iso 
 Mounting CentOS DVD Image...
 mount: /dev/loop1 is write-protected, mounting read-only
 Done.
@@ -70,15 +79,7 @@ fragmd5 = 631648db156318da3cf5aef0db4d65efa7a774fcceabc45e9ecd7476f22b
 frags = 20
 Setting supported flag to 0
 Done.
-ido Created. [centos7-x86_64-my-custom.iso]
-```
-
-## Troubleshooting
-
-### Kickstart Validation
-
-```bash
-$ ksvalidator /ks/ks.cfg
+iso Created. [centos7-x86_64-my-custom.iso]
 ```
 
 ## References
