@@ -1,5 +1,5 @@
 *.iso
 *.info.txt
-hardened-tmp/
+custom-tmp/
 original-mnt/
 .vagrant

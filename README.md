@@ -70,7 +70,7 @@ fragmd5 = 631648db156318da3cf5aef0db4d65efa7a774fcceabc45e9ecd7476f22b
 frags = 20
 Setting supported flag to 0
 Done.
-ido Created. [centos7-x86_64-Manpack_Atom.iso]
+ido Created. [centos7-x86_64-my-custom.iso]
 ```
 
 ## Troubleshooting
@@ -78,13 +78,14 @@ ido Created. [centos7-x86_64-Manpack_Atom.iso]
 ### Kickstart Validation
 
 ```bash
-$ ksvalidator /ks/Atom_Kickstart.cfg
+$ ksvalidator /ks/ks.cfg
 ```
 
 ## References
 
 - [Syslinux ISOLINUX](https://wiki.syslinux.org/wiki/index.php?title=ISOLINUX)
 - [mkisofs man page](https://linux.die.net/man/8/mkisofs)
+- [genisoimage man page](https://linux.die.net/man/1/genisoimage)
 - [RedHat: Making the Kickstart File Available](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/installation_guide/s1-kickstart2-putkickstarthere)
 - [centos 7 install via Kickstart File](https://www.smorgasbork.com/2014/07/16/building-a-custom-centos-7-kickstart-disc-part-1/)
 - [Tutorial CentOS 7 Install via USB](https://softpanorama.org/Commercial_linuxes/RHEL/Installation/Kickstart/modifing_iso_image_to_include_kickstart_file.shtml#Extracting_the_source)
