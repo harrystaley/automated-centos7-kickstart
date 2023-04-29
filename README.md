@@ -82,6 +82,20 @@ Done.
 iso Created. [centos7-x86_64-my-custom.iso]
 ```
 
+## Troubleshooting
+
+### Custom Boot Menu does not show up over a serial connection
+
+1. Hit the 'e' to edit the install options.
+1. Delete the `quiet` option at the end of the first line
+1. Replace `quiet` with the velow text.
+
+  ```terminal
+  inst.ks=hd:LABEL=CentOS\x207\x20x86_64:/ks/ks.cfg console=ttyS0,115200n8` while editing install.
+  ```
+
+1. Hit `ctrl+x` to start the boot process.
+
 ## References
 
 - [Syslinux ISOLINUX](https://wiki.syslinux.org/wiki/index.php?title=ISOLINUX)
