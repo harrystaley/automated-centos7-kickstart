@@ -20,16 +20,28 @@ To create the custom ISO image downlaod a updated CentOS 7 ISO file into this di
 
 ## Project Structure
 
-```text
-vagrantfile - This is used to create a CentOS 7 VM to run the script.
-create_custom_iso.sh - installation script to modify CentOS 7 ISO image
-/config - Files needed to modify the ISO image.
-	/EFI/BOOT/grub.cfg - Menu Configuration for UEFI boot
-	/isolinux/isolinux.cfg - Menu Configuration for BIOS boot
-	/ks/ks.cfg - Kickstart Configuration
+```terminal
+├── vagrantfile
+├── create_custom_iso.sh
+└── config/
+    ├── EFI/
+    │   └── BOOT/
+    │       └── grub.cfg
+    ├── isolinux/
+    │   └── isolinux.cfg
+    └── ks/
+        └── ks.cfg
 ```
 
 **NOTE:** The directory structure in the `/config/` directory are copied over to the newly created iso.
+
+| file                 | purpose                                                           |
+|----------------------|-------------------------------------------------------------------|
+| grub.cfg             | Menu Configuration for UEFI boot                                  |
+| isolinux.cfg         | Menu Configuration for BIOS boot                                  |
+| ks.cfg               | Kickstart Configuration that provides the config to the installer |
+| create_custom_iso.sh | Main shell script that creates the custom ISO                     |
+| vagrantfile          | contains parameters to automate the generation of a VM            |
 
 ## Execution
 
@@ -90,9 +102,9 @@ iso Created. [centos7-x86_64-my-custom.iso]
 1. Delete the `quiet` option at the end of the first line
 1. Replace `quiet` with the velow text.
 
-  ```terminal
-  inst.ks=hd:LABEL=CentOS\x207\x20x86_64:/ks/ks.cfg console=ttyS0,115200n8` while editing install.
-  ```
+    ```terminal
+    inst.ks=hd:LABEL=CentOS\x207\x20x86_64:/ks/ks.cfg console=ttyS0,115200n8` while editing install.
+    ```
 
 1. Hit `ctrl+x` to start the boot process.
 
@@ -109,3 +121,4 @@ iso Created. [centos7-x86_64-my-custom.iso]
 - [Python Kickstart Tool Documentation](https://pykickstart.readthedocs.io/en/latest/)
 - [Kickstart File Generator](https://access.redhat.com/labs/kickstartconfig/)
   **NOTE** Select RHEL 7 from the dropdown
+- [Markdown DIR Generator](https://tree.nathanfriend.io/)
