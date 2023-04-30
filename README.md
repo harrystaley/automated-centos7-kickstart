@@ -33,7 +33,7 @@ To create the custom ISO image downlaod a updated CentOS 7 ISO file into this di
         └── ks.cfg
 ```
 
-**NOTE:** The directory structure in the `/config/` directory are copied over to the newly created iso.
+**NOTE:** The`/config/` directory and contents are copied over to the newly created iso thus the directory structure needs to match that of your original ISO.
 
 | file                 | purpose                                                           |
 |----------------------|-------------------------------------------------------------------|
