@@ -9,12 +9,12 @@ x86_64 iso with a kickstart that will automate Manpack Atom installations.
 
 ## Prerequisites
 
-Install the following software:
+Install:
 
 - [Virtualbox](https://www.virtualbox.org/wiki/Downloads)
 - [Vagrant](https://developer.hashicorp.com/vagrant/docs/installation)
 
-To create the custom ISO image downlaod a updated CentOS 7 ISO file into this directory.
+Download the CentOS 7 ISO to be customized:
 
 - [CentOS 7 x86_64](http://isoredirect.centos.org/centos/7/isos/x86_64/)
 
@@ -114,6 +114,7 @@ iso Created. [centos7-x86_64-my-custom.iso]
 - [mkisofs man page](https://linux.die.net/man/8/mkisofs)
 - [genisoimage man page](https://linux.die.net/man/1/genisoimage)
 - [RedHat: Making the Kickstart File Available](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/installation_guide/s1-kickstart2-putkickstarthere)
+- [RedHat: Working with ISO Images](https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/7/html/anaconda_customization_guide/sect-iso-images)
 - [centos 7 install via Kickstart File](https://www.smorgasbork.com/2014/07/16/building-a-custom-centos-7-kickstart-disc-part-1/)
 - [Tutorial CentOS 7 Install via USB](https://softpanorama.org/Commercial_linuxes/RHEL/Installation/Kickstart/modifing_iso_image_to_include_kickstart_file.shtml#Extracting_the_source)
 - [Setup CentOS 7 Install USB](https://gist.github.com/abrahamrhoffman/6dae37d7bb533ae50ccb)
